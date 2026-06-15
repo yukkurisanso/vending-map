@@ -53,6 +53,7 @@ import {
   getFirestore,
   collection,
   addDoc
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -68,9 +69,31 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-alert("Firebase接続OK");alert("Firebase接続OK");
+async function loadVendingMachines() {
+
+    const querySnapshot =
+        await getDocs(
+            collection(db, "vendingMachines")
+        );
+
+    querySnapshot.forEach((doc) => {
+
+        const data = doc.data();
+
+        if(data.lat && data.lng){
+
+            L.marker([data.lat, data.lng])
+                .addTo(map)
+                .bindPopup("🥤 登録済み自販機");
+
+        }
+
+    });
+
+}
 
 const map = L.map('map').setView([35.681236,139.767125],13);
+loadVendingMachines();
 
 L.tileLayer(
 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
