@@ -122,6 +122,30 @@ out;
 
 }
 
+document
+.getElementById("addVending")
+.addEventListener("click", async () => {
+
+    try {
+
+        await addDoc(
+            collection(db, "vendingMachines"),
+            {
+                name: "テスト自販機",
+                createdAt: Date.now()
+            }
+        );
+
+        alert("保存成功！");
+
+    } catch(error) {
+
+        alert(error.message);
+
+    }
+
+});
+
 navigator.geolocation.getCurrentPosition(
 (position) => {
 
