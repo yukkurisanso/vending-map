@@ -71,7 +71,9 @@ import {
   getFirestore,
   collection,
   addDoc,
-  getDocs
+  getDocs,
+  deleteDoc,
+  doc
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -86,6 +88,37 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const markers = {};
+
+window.deleteVending = async function(id) {
+
+    if(!confirm("この自販機を削除しますか？")){
+        return;
+    }
+
+    try {
+
+        await deleteDoc(
+            doc(db, "vendingMachines", id)
+        );
+
+        if(markers[id]){
+
+            map.removeLayer(markers[id]);
+
+            delete markers[id];
+
+        }
+
+        alert("削除しました");
+
+    } catch(error) {
+
+        alert(error.message);
+
+    }
+
+}
 
 async function loadVendingMachines() {
 
@@ -94,16 +127,22 @@ async function loadVendingMachines() {
             collection(db, "vendingMachines")
         );
 
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((docItem) => {
 
-        const data = doc.data();
+        const data = docItem.data();
 
         if(data.lat && data.lng){
 
-            L.marker([data.lat, data.lng])
+            const marker = L.marker([data.lat, data.lng])
                 .addTo(map)
-                .bindPopup("🥤 登録済み自販機")
-                .openPopup();
+                .bindPopup(`
+                    🥤 登録済み自販機<br><br>
+                    <button onclick="deleteVending('${docItem.id}')">
+                        🗑️削除
+                    </button>
+                `);
+
+            markers[docItem.id] = marker;
 
         }
 
@@ -184,7 +223,7 @@ document
         const lat = center.lat;
         const lng = center.lng;
 
-        await addDoc(
+        const docRef = await addDoc(
             collection(db, "vendingMachines"),
             {
                 lat: lat,
@@ -192,6 +231,17 @@ document
                 createdAt: Date.now()
             }
         );
+
+        const marker = L.marker([lat, lng])
+            .addTo(map)
+            .bindPopup(`
+                🥤 登録済み自販機<br><br>
+                <button onclick="deleteVending('${docRef.id}')">
+                    🗑️削除
+                </button>
+            `);
+
+        markers[docRef.id] = marker;
 
         alert("自販機を登録した！");
 
