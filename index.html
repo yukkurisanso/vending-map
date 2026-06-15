@@ -35,12 +35,30 @@ body{
 #map{
     height:100vh;
 }
+
+#crosshair{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    font-size: 40px;
+    font-weight: bold;
+
+    z-index: 999;
+
+    pointer-events: none;
+}
+
 </style>
 </head>
 
 <body>
 
 <div id="map"></div>
+
+<div id="crosshair">+</div>
 
 <button id="addVending">🥤</button>
 
@@ -151,42 +169,37 @@ out;
 
 document
 .getElementById("addVending")
-.addEventListener("click", () => {
+.addEventListener("click", async () => {
 
-    navigator.geolocation.getCurrentPosition(
-        async (position) => {
+    try {
 
-            try {
-
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-
-                await addDoc(
-                    collection(db, "vendingMachines"),
-                    {
-                        lat: lat,
-                        lng: lng,
-                        createdAt: Date.now()
-                    }
-                );
-
-                alert("現在地を保存した！");
-
-            } catch(error) {
-
-                alert(error.message);
-
-            }
-
-        },
-        (error) => {
-
-            alert(error.message);
-
+        if(!confirm("この場所に自販機を登録しますか？")){
+            return;
         }
-    );
 
-});        
+        const center = map.getCenter();
+
+        const lat = center.lat;
+        const lng = center.lng;
+
+        await addDoc(
+            collection(db, "vendingMachines"),
+            {
+                lat: lat,
+                lng: lng,
+                createdAt: Date.now()
+            }
+        );
+
+        alert("自販機を登録した！");
+
+    } catch(error) {
+
+        alert(error.message);
+
+    }
+
+});
 
 navigator.geolocation.getCurrentPosition(
 (position) => {
