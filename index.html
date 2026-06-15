@@ -90,7 +90,8 @@ async function loadVendingMachines() {
 
             L.marker([data.lat, data.lng])
                 .addTo(map)
-                .bindPopup("🥤 登録済み自販機");
+                .bindPopup("🥤 登録済み自販機")
+                .openPopup();
 
         }
 
@@ -204,6 +205,8 @@ navigator.geolocation.getCurrentPosition(
     alert(`精度: ${Math.round(accuracy)}m`);
 
     map.setView([lat, lng], 16);
+
+    loadVendingMachines();
 
     findVendingMachines(lat, lng);
 
