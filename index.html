@@ -124,33 +124,43 @@ out;
 
 document
 .getElementById("addVending")
-.addEventListener("click", async () => {
+.addEventListener("click", () => {
 
-    try {
+    navigator.geolocation.getCurrentPosition(
+        async (position) => {
 
-        navigator.geolocation.getCurrentPosition(
-    async (position) => {
+            try {
 
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
 
-        await addDoc(
-            collection(db, "vendingMachines"),
-            {
-                lat: lat,
-                lng: lng,
-                createdAt: Date.now()
+                await addDoc(
+                    collection(db, "vendingMachines"),
+                    {
+                        lat: lat,
+                        lng: lng,
+                        createdAt: Date.now()
+                    }
+                );
+
+                alert("現在地を保存した！");
+
+            } catch(error) {
+
+                alert(error.message);
+
             }
-        );
 
-        alert("現在地を保存した！");
-    },
-    (error) => {
-        alert(error.message);
-    }
-);
+        },
+        (error) => {
 
-        
+            alert(error.message);
+
+        }
+    );
+
+});        
+
 navigator.geolocation.getCurrentPosition(
 (position) => {
 
