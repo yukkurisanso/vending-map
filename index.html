@@ -131,7 +131,7 @@ async function findVendingMachines(lat, lng) {
         const query = `
 [out:json];
 (
-  node["amenity"="vending_machine"](around:10000,${lat},${lng});
+  node["amenity"="vending_machine"](around:1000,${lat},${lng});
 );
 out;
 `;
@@ -145,6 +145,8 @@ out;
         );
 
         alert("通信成功");
+
+        alert(response.status);
 
         const data = await response.json();
 
