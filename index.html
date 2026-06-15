@@ -267,11 +267,27 @@ navigator.geolocation.getCurrentPosition(
     loadVendingMachines();
 
     findVendingMachines(lat, lng);
+    const currentLocationIcon = L.divIcon({
+        html: `
+        <div style="
+            width:20px;
+            height:20px;
+            background:#2196F3;
+            border:3px solid white;
+            border-radius:50%;
+            box-shadow:0 0 8px #2196F3;
+        "></div>
+    `,
+    className: "",
+    iconSize: [20,20]
+});
 
-    L.marker([lat, lng])
-        .addTo(map)
-        .bindPopup(`現在地 (±${Math.round(accuracy)}m)`)
-        .openPopup();
+    L.marker([lat, lng], {
+        icon: currentLocationIcon
+    })
+    .addTo(map)
+    .bindPopup(`現在地 (±${Math.round(accuracy)}m)`)
+    .openPopup();
 
 },
 (error) => {
