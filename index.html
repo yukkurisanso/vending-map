@@ -71,20 +71,14 @@ const db = getFirestore(app);
 
 async function loadVendingMachines() {
 
-    alert("Firestore読み込み開始");
-
     const querySnapshot =
         await getDocs(
             collection(db, "vendingMachines")
         );
 
-    alert("件数: " + querySnapshot.size);
-
     querySnapshot.forEach((doc) => {
 
         const data = doc.data();
-
-        alert(JSON.stringify(data));
 
         if(data.lat && data.lng){
 
