@@ -33,13 +33,17 @@ const map = L.map('map').setView([35.681236,139.767125],13);
 L.tileLayer(
 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
 {
-maxZoom:19
+    maxZoom:19
 }
 ).addTo(map);
 
 async function findVendingMachines(lat, lng) {
 
-    const query = `
+    try {
+
+        alert("自販機検索開始");
+
+        const query = `
 [out:json];
 (
   node["amenity"="vending_machine"](around:2000,${lat},${lng});
@@ -47,23 +51,34 @@ async function findVendingMachines(lat, lng) {
 out;
 `;
 
-    const response = await fetch(
-        "https://overpass-api.de/api/interpreter",
-        {
-            method: "POST",
-            body: query
-        }
-    );
+        const response = await fetch(
+            "https://overpass-api.de/api/interpreter",
+            {
+                method: "POST",
+                body: query
+            }
+        );
 
-    const data = await response.json();
+        alert("通信成功");
 
-    data.elements.forEach(machine => {
+        const data = await response.json();
 
-        L.marker([machine.lat, machine.lon])
-            .addTo(map)
-            .bindPopup("🥤 自販機");
+        alert("自販機数: " + data.elements.length);
 
-    });
+        data.elements.forEach(machine => {
+
+            L.marker([machine.lat, machine.lon])
+                .addTo(map)
+                .bindPopup("🥤 自販機");
+
+        });
+
+    } catch (error) {
+
+        alert("エラー発生");
+        alert(error);
+
+    }
 
 }
 
