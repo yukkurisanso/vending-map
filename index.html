@@ -128,23 +128,27 @@ document
 
     try {
 
+        navigator.geolocation.getCurrentPosition(
+    async (position) => {
+
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
         await addDoc(
             collection(db, "vendingMachines"),
             {
-                name: "テスト自販機",
+                lat: lat,
+                lng: lng,
                 createdAt: Date.now()
             }
         );
 
-        alert("保存成功！");
-
-    } catch(error) {
-
+        alert("現在地を保存した！");
+    },
+    (error) => {
         alert(error.message);
-
     }
-
-});
+);
 
 navigator.geolocation.getCurrentPosition(
 (position) => {
