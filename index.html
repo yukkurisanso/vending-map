@@ -35,6 +35,19 @@ import {
   addDoc
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyDL1O679i1NpEhsaRyUktXloPbl6LFEHcE",
+  authDomain: "vending-map-b1326.firebaseapp.com",
+  projectId: "vending-map-b1326",
+  storageBucket: "vending-map-b1326.firebasestorage.app",
+  messagingSenderId: "160696665192",
+  appId: "1:160696665192:web:bc2607ad52a38c4b9d27dd",
+  measurementId: "G-YYQ0Y358SD"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 const map = L.map('map').setView([35.681236,139.767125],13);
 
 L.tileLayer(
