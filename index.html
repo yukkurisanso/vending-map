@@ -10,6 +10,24 @@
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
+#addVending{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+
+    width: 60px;
+    height: 60px;
+
+    border: none;
+    border-radius: 50%;
+
+    font-size: 25px;
+
+    z-index: 1000;
+
+    cursor: pointer;
+}
+
 body{
     margin:0;
 }
@@ -23,6 +41,8 @@ body{
 <body>
 
 <div id="map"></div>
+
+<button id="addVending">🥤</button>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
